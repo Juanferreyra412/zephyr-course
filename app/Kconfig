@@ -1,109 +1,11 @@
 menu "App configuration"
 
-    menuconfig LED_SUBSYSTEM
-        bool "LED subsystem"
-        default y
+    config APP_HEARTBEAT_PERIOD_MS
+        int "Heartbeat period (ms)"
+        default 1000
+        range 100 2000
         help
-            Enable LED subsystem
-
-    if LED_SUBSYSTEM
-
-        choice
-            prompt "LED blink sleep time (ms)"
-            default SLEEP_TIME_FAST
-
-        config SLEEP_TIME_VERY_FAST
-            bool "200 ms (Very Fast)"
-            help
-                Very fast blink
-
-        config SLEEP_TIME_FAST
-            bool "500 ms (Fast)"
-            help
-                Fast blink
-
-        config SLEEP_TIME_MEDIUM
-            bool "1s (Medium)"
-            help
-                Medium blink
-
-        config SLEEP_TIME_SLOW
-            bool "2s (Slow)"
-            help
-                Slow blink
-
-        config SLEEP_TIME_VERY_SLOW
-            bool "5s (Very Slow)"
-            help
-                Very slow blink
-
-        endchoice
-
-        config APP_LED_BLINK_SLEEP_TIME_MS_MENU
-            int
-            default 500 if SLEEP_TIME_FAST
-            default 1000 if SLEEP_TIME_MEDIUM
-            default 2000 if SLEEP_TIME_SLOW
-            default 5000
-
-        menuconfig LED_ADVANCED_SETTINGS
-            bool "Advanced LED settings"
-            default n
-            help
-                Enable advanced LED settings
-
-        if LED_ADVANCED_SETTINGS
-
-            config MENU_LED_BRIGHTNESS
-                int "LED brightness (0%-100%)"
-                default 100
-                range 0 100
-                help
-                    Set the LED brightness (in percent)
-
-            config MENU_LED_FADE_TIME_MS
-                int "LED fade duration (ms)"
-                default 0
-                range 0 5000
-                help
-                    Set the LED fade duration (in milliseconds)
-
-        endif
-
-
-
-        menu "Expert settings"
-        visible if LED_ADVANCED_SETTINGS
-        config ENABLE_LED_DEBUGGING
-            bool "Enable LED debugging"
-            default n
-            help
-                Enable LED debugging
-
-        config CUSTOM_BLINK_PATTERN
-            bool "Custom blink pattern"
-            default n
-            help
-                Enable custom blink pattern
-
-    endmenu
-    
-    endif
-
-    config APP_LED_BLINK_SLEEP_TIME_MS
-        int
-        default APP_LED_BLINK_SLEEP_TIME_MS_MENU if LED_SUBSYSTEM
-        default 1
-
-    config LED_BRIGHTNESS
-        int
-        default MENU_LED_BRIGHTNESS if LED_ADVANCED_SETTINGS
-        default 100
-
-    config LED_FADE_TIME_MS
-        int
-        default MENU_LED_FADE_TIME_MS if LED_ADVANCED_SETTINGS
-        default 0
+            Set the heartbeat period (in milliseconds)
 
 endmenu
 
