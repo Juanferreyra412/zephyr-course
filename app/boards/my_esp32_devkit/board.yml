@@ -1,0 +1,6 @@
+board:
+  name: my_esp32_devkit
+  full_name: My ESP32 DevKit Board
+  vendor: espressif
+  socs:
+  - name: esp32
