@@ -1,35 +1,34 @@
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/sensor.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 
-#define SLEEP_TIME_MS 1000
+#define SLEEP_TIME_MS CONFIG_LED_BLINK_INTERVAL
 
-/* The devicetree node identifier for the "led0" alias. */
-#define LED_NODE DT_ALIAS(led0)
+#define LED_NODE DT_ALIAS(led)
 
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE, gpios);
+static const struct device *my_led = DEVICE_DT_GET(LED_NODE);
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 int main(void)
 {
-	bool led_state = true;
-
-	printk("Hola mundo\n");
-
-	if (!gpio_is_ready_dt(&led))
-		return 0;
-
-	if (gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE) < 0)
-		return 0;
 
 	while (1) {
-		if (gpio_pin_toggle_dt(&led) < 0)
-			return 0;
 
-		led_state = !led_state;
-		LOG_INF("LED state: %s", led_state ? "ON" : "OFF");
+		if (sensor_sample_fetch(my_led) < 0) {
+			LOG_ERR("Failed to fetch sample from my_led");
+		}
+
+		k_msleep(SLEEP_TIME_MS);
+
+		// struct sensor_value value;
+		if (sensor_channel_get(my_led, SENSOR_CHAN_ALL, NULL) < 0) {
+			LOG_ERR("Failed to get channel from my_led");
+		}
+
 		k_msleep(SLEEP_TIME_MS);
 	}
+
 	return 0;
 }

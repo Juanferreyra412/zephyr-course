@@ -1,0 +1,11 @@
+include: base.yaml
+
+description: LED driver
+
+compatible: "my,driver"
+
+properties:
+  gpios:
+    type: phandle-array
+    required: true
+    description: GPIO pin for the LED
