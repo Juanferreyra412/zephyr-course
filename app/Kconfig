@@ -8,7 +8,7 @@ menu "App configuration"
     rsource "drivers/my_driver/Kconfig"
     config LED_BLINK_INTERVAL
         int "LED Blink Interval"
-        default 500
+        default 3000
         help
             Time in milliseconds to blink the LED
 endmenu

@@ -1,8 +1,17 @@
-menuconfig MY_DRIVER
+config MY_DRIVER
     bool "Enable my Driver"
     default n
     select GPIO
-    select SENSOR
+    # select SENSOR
     depends on DT_HAS_MY_DRIVER_ENABLED
     help
         Enable my Driver
+
+if MY_DRIVER
+
+config LED_DEFAULT_ON
+    bool "LED default ON state"
+    default n
+    help
+        Set the LED default ON state
+endif
