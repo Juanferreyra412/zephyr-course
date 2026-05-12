@@ -66,7 +66,26 @@ static bool my_driver_led_get_state_impl(const struct device *dev)
 	return data->led_state;
 }
 
+static int my_driver_sample_fetch_impl(const struct device *dev, enum sensor_channel chan)
+{
+	// Solo se enciende el led
+	ARG_UNUSED(chan);
+	const struct my_driver_config *config = dev->config;
+	struct my_driver_data *data = dev->data;
+
+	if (gpio_pin_set_dt(&config->led_pin, 1) < 0)
+		return -EIO;
+
+	data->led_state = true;
+
+	return 0;
+}
+
 static const struct my_driver_api my_api = {
+    .parent_api =
+        {
+            .sample_fetch = my_driver_sample_fetch_impl,
+        },
     .led_init = my_driver_led_init_impl,
     .led_on = my_driver_led_on_impl,
     .led_off = my_driver_led_off_impl,

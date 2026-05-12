@@ -2,7 +2,7 @@ config MY_DRIVER
     bool "Enable my Driver"
     default n
     select GPIO
-    # select SENSOR
+    select SENSOR
     depends on DT_HAS_MY_DRIVER_ENABLED
     help
         Enable my Driver

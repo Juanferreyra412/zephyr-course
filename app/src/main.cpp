@@ -18,6 +18,12 @@ int main(void)
 		LOG_INF("LED state: OFF");
 	}
 
+	my_driver_led_off(my_led);
+	k_msleep(SLEEP_TIME_MS);
+
+	my_driver_sample_fetch(my_led, SENSOR_CHAN_ALL);
+	k_msleep(SLEEP_TIME_MS);
+
 	while (1) {
 
 		k_msleep(SLEEP_TIME_MS);
