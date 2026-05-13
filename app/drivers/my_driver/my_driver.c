@@ -81,6 +81,18 @@ static int my_driver_sample_fetch_impl(const struct device *dev, enum sensor_cha
 	return 0;
 }
 
+static void my_driver_set_value_impl(const struct device *dev, int value)
+{
+	struct my_driver_data *data = dev->data;
+	data->value = value;
+}
+
+static int my_driver_get_value_impl(const struct device *dev)
+{
+	struct my_driver_data *data = dev->data;
+	return data->value;
+}
+
 static const struct my_driver_api my_api = {
     .parent_api =
         {
@@ -91,6 +103,8 @@ static const struct my_driver_api my_api = {
     .led_off = my_driver_led_off_impl,
     .led_toggle = my_driver_led_toggle_impl,
     .led_get_state = my_driver_led_get_state_impl,
+    .set_value = my_driver_set_value_impl,
+    .get_value = my_driver_get_value_impl,
 };
 
 #define MY_DRIVER_INIT(inst)                                                                       \

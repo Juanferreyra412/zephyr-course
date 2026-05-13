@@ -18,6 +18,8 @@ typedef int (*led_on_t)(const struct device *dev);
 typedef int (*led_off_t)(const struct device *dev);
 typedef int (*led_toggle_t)(const struct device *dev);
 typedef bool (*led_get_state_t)(const struct device *dev);
+typedef void (*set_value_t)(const struct device *dev, int value);
+typedef int (*get_value_t)(const struct device *dev);
 
 struct my_driver_config {
 	const struct gpio_dt_spec led_pin;
@@ -25,6 +27,7 @@ struct my_driver_config {
 
 struct my_driver_data {
 	bool led_state;
+	int value;
 };
 
 __subsystem struct my_driver_api {
@@ -34,6 +37,8 @@ __subsystem struct my_driver_api {
 	led_off_t led_off;
 	led_toggle_t led_toggle;
 	led_get_state_t led_get_state;
+	set_value_t set_value;
+	get_value_t get_value;
 };
 
 static inline int my_driver_sample_fetch(const struct device *dev, enum sensor_channel chan)
@@ -64,6 +69,16 @@ static inline int my_driver_led_toggle(const struct device *dev)
 static inline bool my_driver_led_get_state(const struct device *dev)
 {
 	return DEVICE_API_GET(my, dev)->led_get_state(dev);
+}
+
+static inline void my_driver_set_value(const struct device *dev, int value)
+{
+	DEVICE_API_GET(my, dev)->set_value(dev, value);
+}
+
+static inline int my_driver_get_value(const struct device *dev)
+{
+	return DEVICE_API_GET(my, dev)->get_value(dev);
 }
 
 #ifdef __cplusplus
